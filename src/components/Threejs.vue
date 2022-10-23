@@ -109,6 +109,26 @@ onMounted(async () => {
   const rotation = { x: 0, y: 0, z: 0 }
   gui.add(rotation, 'y', 0, 10)
 
+  const raycaster = new THREE.Raycaster()
+  const mouse = new THREE.Vector2(1, 1)
+  const intersects = []
+  let isHovering = false
+  function onClick(event: any) {
+    event.preventDefault()
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+    raycaster.setFromCamera(mouse, camera)
+
+    const intersects = raycaster.intersectObject(scene, true)
+    if (intersects.length > 0)
+      isHovering = true
+    else
+      isHovering = false
+  }
+
+  renderer.domElement.addEventListener('mousemove', onClick, false)
   const tick = () => {
     // Update objects
     sphere.rotation.y = 0.5 * rotation.y
@@ -120,8 +140,10 @@ onMounted(async () => {
     renderer.render(scene, camera)
 
     // Call tick again on the next frame
-    if (material.uniforms.time.value < 2)
-      material.uniforms.time.value += 0.01
+    if (!isHovering && material.uniforms.time.value < 1)
+      material.uniforms.time.value += 0.03
+    else if (isHovering && material.uniforms.time.value > 0)
+      material.uniforms.time.value -= 0.03
     window.requestAnimationFrame(tick)
   }
 
