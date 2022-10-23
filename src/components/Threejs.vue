@@ -30,12 +30,14 @@ onMounted(async () => {
       time: { value: 0 },
       resolution: { value: new THREE.Vector2() },
       t1: { value: new THREE.TextureLoader().load('/image.jpg') },
+      distortion: { value: new THREE.TextureLoader().load('/distortion.png') },
     },
     vertexShader,
     fragmentShader,
 
   })
   material.side = THREE.DoubleSide
+  gui.add(material.uniforms.time, 'value', 0, 2)
 
   // Mesh
   const sphere = new THREE.Mesh(geometry, material)
