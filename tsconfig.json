@@ -13,6 +13,10 @@
       "esnext",
       "dom"
     ],
+    "types" : [ "three", "dat.gui" ],
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
     "allowJs": true,
   },
   "include": [
